@@ -1,0 +1,96 @@
+PART 1: SETUP
+*************
+
+i want to compare multiple different embedding models in the following (perhaps unusual) way:
+
+I define a baseline model, which by itself per definition stands for the "ground truth". in my caes, this shall be openai's text-embedding-3-large, since it is considered SOTA and definitely one of THE best in the world right now.
+
+so first of all, a recap: 
+
+I have now implemented a microservice that takes care of embeddings and supports various multiple models, both local and remote
+
+it takes requests of this form
+
+POST /embed_batch HTTP/1.1
+Host: localhost:8001
+content-type: application/json
+
+{
+    "texts": ["hello", "world"],
+    "model": "text-embedding-3-large"
+}
+
+(batch) 
+
+or this
+
+POST /embed HTTP/1.1
+Host: localhost:8001
+content-type: application/json
+
+{
+    "text": "hello",
+    "model": "text-embedding-3-large"
+}
+
+(single)
+
+and produces a response like this
+
+
+{
+  "model": "text-embedding-3-large",
+  "embedding": [
+    -0.024605071172118187,
+    -0.0075481850653886795,
+  ]
+...
+}
+
+(single) 
+
+and this
+
+{
+  "model": "text-embedding-3-large",
+  "embeddings": [
+    [
+    ],
+    [
+      0.03997724503278732,
+      0.012087714858353138,
+      0.011015689931809902,
+...
+]]
+}
+
+respectively 
+
+So i want to do the following in a new repo:
+
+assume there is a dataset in ./datasets/docs/1/... (there will be multiple ones later) which is just a set of files (any type of human-readable file like .md, .txt, .html, ...)
+
+assume further that there is another set of data, namely a corresponding list of test queries (in a .jsonl file in a directory called ./datasets/queries/1.jsonl*)
+first we need to do some setting up
+
+- in the first script (db_creator.py), we have a list of models (including text-embedding-3-large) which we want to test (in code, just a list of strings identifying the models)
+- we select ONE dataset in code (by its folder name inside datasets/docs/<name>), and for each model, we need to create a local faiss vector store
+- we store these vector stores inside ./vdbs/<name>, whereby we follow the following naming schema for the vdb file name: <model_id>_<dataset_id>
+- note: the chunking and embedding parameters must be EQUAL for all models
+
+
+
+PART 2: tester
+**************
+
+
+then, in the main test script (tester.py) we need to do the following things
+
+- we again have the same list of embedding model ids
+- now we select ONE dataset and ONE .jsonl file for the test queries
+- for each model, we compute the embedding for each test query in the loaded jsonl file
+- for the computed embedding, we get its n-closest neighbors in the corresponding vector db, ordered descendingly by closeness (closest first); we can configure the n as we wish in code
+- now its time to compute the score for each model: 
+  - for each query result (an n-tuple of ordered vectors), we compute a score, and then we compute a final score by averaging over all scores
+  - how to compute the score: compare the n ordered vectors with the ones returned by text-embedding-3-large: use some sort of sensible and reasonable distance metric between the two sets. make this functional so we can always swap out the exact metric later
+- finally, save a file named result_yyyyMMdd-hhmmss.csv, which contains simply 2 columns: model_id and its score
