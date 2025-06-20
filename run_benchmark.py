@@ -99,7 +99,8 @@ def main():
         results.append((model, float(np.mean(scores))))
 
     # --- write CSV ---
-    out_csv = f"result_{dt.datetime.now().strftime('%Y%m%d-%H%M%S')}.csv"
+    out_csv = f"rpt_{dt.datetime.now().strftime('%y%m%d-%H%M%S')}_{args.dataset}_top-{args.top_k}.csv"
+
     with open(out_csv, "w", newline="", encoding="utf-8") as fp:
         w = csv.writer(fp)
         w.writerow(["model_id", "score"])
