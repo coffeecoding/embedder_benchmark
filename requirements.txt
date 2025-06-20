@@ -2,3 +2,4 @@ faiss-cpu
 requests
 tqdm
 numpy
+openai

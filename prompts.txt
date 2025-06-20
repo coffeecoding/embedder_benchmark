@@ -79,8 +79,37 @@ first we need to do some setting up
 - note: the chunking and embedding parameters must be EQUAL for all models
 
 
+PART 2: query db_creator
+************************
 
-PART 2: tester
+Alright, now that we've got that done, we need to be able to generate query sets for each database.
+
+For that we will create a new script called "query_creator.py".
+
+It will do the following:
+
+- it has a system prompt, we will define its details later, but the important part is that it will tell gpt that it MUST return a list of queries, and NOTHING else
+    - one detail here is that it will tell gpt to return an appropriate amount of queries: about one for each paragraph in the document
+    - the prompt has a document placeholder which will be filled with the actual document
+    - we will have a list of system prompts later as we test diffreent ones, so make this a list
+- it takes a dataset just like the previous one
+- for each document in the dataset, it makes a request to openai and receives a list of queries
+- it generates a new id for this run in the form of <dataset_id>_<llm_model>_<system_prompt_idx>_yyMMdd-hhmmss.jsonl
+- it streams the returned queries straight into a jsonl file in datasets/queries/<id>.jsonl
+
+Use the responses api endpoint from openai as follows 
+
+from openai import OpenAI
+client = OpenAI()
+
+response = client.responses.create(
+    model="gpt-4.1",
+    input="Write a one-sentence bedtime story about a unicorn."
+)
+
+print(response.output_text)
+
+PART 3: tester
 **************
 
 
