@@ -1,8 +1,8 @@
 # Run indexer
-python indexer.py --dataset 2
+python indexer.py --dataset 1
 
 # Run query generator
-python query_creator.py --dataset 2
+python query_creator.py --dataset 1
 
 # Run benchmarker 
-python run_benchmark.py --dataset 2 --queries <file.jsonl> --top_k 10
+python run_benchmark.py --dataset 1 --queries 1_gpt-4-1-mini_1_250620-182903.jsonl
