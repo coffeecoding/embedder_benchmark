@@ -3,3 +3,4 @@ requests
 tqdm
 numpy
 openai
+html2text

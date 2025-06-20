@@ -8,6 +8,7 @@ across models to enable fair comparison.
 import argparse, os, json, pathlib, glob
 from typing import List
 import requests, faiss, numpy as np
+import html2text
 from tqdm import tqdm
 
 CHUNK_SIZE = 512
@@ -25,9 +26,13 @@ def read_docs(ds_path: str) -> List[str]:
     """Load all readable text from a dataset folder (deterministic order)."""
     docs = []
     for fp in sorted(glob.glob(os.path.join(ds_path, "**/*"), recursive=True)):
-        if pathlib.Path(fp).suffix.lower() in {".txt", ".md", ".html", ".htm"}:
+        suffix = pathlib.Path(fp).suffix.lower()
+        if suffix in {".txt", ".md", ".html", ".htm"}:
             with open(fp, "r", encoding="utf-8", errors="ignore") as f:
-                docs.append(f.read())
+                    if suffix in {".html", ".htm"}:
+                        docs.append(html2text.html2text(f.read()))
+                    else:
+                        docs.append(f.read())
     return docs
 
 def chunk(text: str) -> List[str]:
