@@ -19,6 +19,7 @@ HEADERS    = {"content-type": "application/json"}
 MODELS = [
     "text-embedding-3-large",
     "text-embedding-3-small",
+    "uae-large-v1",
     "snowflake-s"
 ]
 

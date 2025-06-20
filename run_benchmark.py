@@ -20,6 +20,7 @@ BASELINE   = "text-embedding-3-large"
 MODELS = [
     BASELINE,                    # ← baseline must be first
     "text-embedding-3-small",
+    "uae-large-v1",
     "snowflake-s"
 ]
 
