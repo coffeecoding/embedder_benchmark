@@ -55,7 +55,7 @@ def embed(texts: List[str], model: str, batch: int = 32) -> np.ndarray:
     return np.asarray(vecs, dtype="float32")
 
 def build_index(vectors: np.ndarray) -> faiss.IndexFlatL2:
-    index = faiss.IndexFlatL2(vectors.shape[1])
+    index = faiss.IndexFlatIP(vectors.shape[1]) # FlatIP should use cosine sim (inner product)
     index.add(vectors)
     return index
 

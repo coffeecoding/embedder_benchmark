@@ -1,0 +1,6 @@
+model_id,score
+text-embedding-3-large,1.0
+text-embedding-3-small,0.7602404246590811
+text-embedding-ada-002,0.6513060296780449
+uae-large-v1,0.6471133864157184
+snowflake-s,0.4259795222585336

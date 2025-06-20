@@ -20,9 +20,9 @@ BASELINE   = "text-embedding-3-large"
 MODELS = [
     BASELINE,
     "text-embedding-3-small",
+    "text-embedding-ada-002",
     "uae-large-v1",
     "snowflake-s",
-    "text-embedding-ada-002"
 ]
 
 # -------------------- helpers -------------------
@@ -59,6 +59,9 @@ def spearman(baseline_ids: List[int], model_ids: List[int]) -> float:
 
 METRICS = {"ndcg": ndcg, "spearman": spearman}
 
+def normalize(v: np.ndarray) -> np.ndarray:
+    return v / np.linalg.norm(v, axis=1, keepdims=True)
+
 # -------------------- main ----------------------
 def main():
     ap = argparse.ArgumentParser()
@@ -80,6 +83,8 @@ def main():
 
     # baseline neighbours
     base_vecs = embed(queries, BASELINE)
+    # L2 normalize vectors since we use cosine similarity
+    base_vecs = normalize(base_vecs)
     _, I_base = indices[BASELINE].search(base_vecs, args.top_k)
 
     # score models
@@ -89,6 +94,8 @@ def main():
             results.append((model, 1.0))
             continue
         vecs = embed(queries, model)
+        # L2 normalize vectors since we use cosine similarity
+        vecs = normalize(vecs)
         _, I_cand = indices[model].search(vecs, args.top_k)
         scores = [metric_fn(list(I_base[q]), list(I_cand[q]))
                   for q in range(len(queries))]
@@ -96,7 +103,7 @@ def main():
 
     # save CSV
     ts = dt.datetime.now().strftime("%y%m%d-%H%M%S")
-    out_csv = f"rpt_{args.dataset}_{args.metric}_top-{args.top_k}_{ts}.csv"
+    out_csv = f"./reports/rpt_{args.dataset}_{args.metric}_top-{args.top_k}_{ts}.csv"
     with open(out_csv, "w", newline="", encoding="utf-8") as fp:
         csv.writer(fp).writerows([["model_id", "score"], *results])
     print(f"Results saved → {out_csv}")
