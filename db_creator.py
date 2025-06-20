@@ -15,11 +15,17 @@ OVERLAP      = 64
 ENDPOINT     = "http://localhost:8001/embed_batch"   # your micro-service
 HEADERS      = {"content-type": "application/json"}
 
+MODELS = [
+    # "text-embedding-3-large",
+    # "text-embedding-3-small",
+    "snowflake-s"
+]
+
 def read_docs(ds_path: str) -> List[str]:
     """Load all readable text from a dataset folder."""
     docs = []
     for fp in glob.glob(os.path.join(ds_path, "**/*"), recursive=True):
-        if pathlib.Path(fp).suffix.lower() in {".txt", ".md", ".html"}:
+        if pathlib.Path(fp).suffix.lower() in {".txt", ".md", ".html", ".htm"}:
             with open(fp, "r", encoding="utf-8", errors="ignore") as f:
                 docs.append(f.read())
     return docs
@@ -52,8 +58,6 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dataset", required=True,
                     help="folder name inside datasets/docs")
-    ap.add_argument("--models", nargs="+", required=True,
-                    help="space-separated list of model ids")
     args = ap.parse_args()
 
     ds_folder = os.path.join("datasets", "docs", args.dataset)
@@ -71,7 +75,7 @@ def main():
         chunks.extend(chunk(doc))
     print(f"  produced {len(chunks)} chunks (size={CHUNK_SIZE}, overlap={OVERLAP})")
 
-    for model in args.models:
+    for model in MODELS:
         print(f"\n=== {model} ===")
         vecs = embed(chunks, model)
         index = build_index(vecs)
