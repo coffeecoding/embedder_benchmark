@@ -13,8 +13,8 @@ from tqdm import tqdm
 # -------------------- config --------------------
 ENDPOINT   = "http://localhost:8001/embed_batch"
 HEADERS    = {"content-type": "application/json"}
-BATCH_SIZE = 32
-TOP_K      = 10
+BATCH_SIZE = 64
+TOP_K      = 5
 BASELINE   = "text-embedding-3-large"
 
 MODELS = [

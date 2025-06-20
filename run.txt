@@ -5,4 +5,4 @@ python indexer.py --dataset 1
 python query_creator.py --dataset 1
 
 # Run benchmarker 
-python run_benchmark.py --dataset 1 --queries 1_gpt-4-1-mini_1_250620-192019.jsonl
+python run_benchmark.py --dataset 2 --queries 2_gpt-4-1-mini_2_250620-223757.jsonl
