@@ -16,8 +16,8 @@ ENDPOINT     = "http://localhost:8001/embed_batch"   # your micro-service
 HEADERS      = {"content-type": "application/json"}
 
 MODELS = [
-    # "text-embedding-3-large",
-    # "text-embedding-3-small",
+    "text-embedding-3-large",
+    "text-embedding-3-small",
     "snowflake-s"
 ]
 

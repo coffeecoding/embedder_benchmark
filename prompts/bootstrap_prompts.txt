@@ -112,14 +112,16 @@ print(response.output_text)
 PART 3: tester
 **************
 
+awesome! we are coming to the third and last part of our little experiment:
 
-then, in the main test script (tester.py) we need to do the following things
+finally now, in the main test script (run_benchmark.py) we need to do the following things
 
-- we again have the same list of embedding model ids
+- we again have the same list of embedding model ids as in the indexer script
 - now we select ONE dataset and ONE .jsonl file for the test queries
-- for each model, we compute the embedding for each test query in the loaded jsonl file
+- for each model, we compute the embedding for each test query in the loaded jsonl file (using the api at localhost:8001, remember)
 - for the computed embedding, we get its n-closest neighbors in the corresponding vector db, ordered descendingly by closeness (closest first); we can configure the n as we wish in code
 - now its time to compute the score for each model: 
   - for each query result (an n-tuple of ordered vectors), we compute a score, and then we compute a final score by averaging over all scores
   - how to compute the score: compare the n ordered vectors with the ones returned by text-embedding-3-large: use some sort of sensible and reasonable distance metric between the two sets. make this functional so we can always swap out the exact metric later
-- finally, save a file named result_yyyyMMdd-hhmmss.csv, which contains simply 2 columns: model_id and its score
+- finally, save a file named result_yyyyMMdd-hhmmss.csv, which contains simply 2 columns: model_id and its score 
+- use tqdm where appropriate so I can see whats happening
