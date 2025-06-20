@@ -21,7 +21,8 @@ MODELS = [
     BASELINE,
     "text-embedding-3-small",
     "uae-large-v1",
-    "snowflake-s"
+    "snowflake-s",
+    "text-embedding-ada-002"
 ]
 
 # -------------------- helpers -------------------

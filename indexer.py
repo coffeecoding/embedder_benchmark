@@ -20,7 +20,8 @@ MODELS = [
     "text-embedding-3-large",
     "text-embedding-3-small",
     "uae-large-v1",
-    "snowflake-s"
+    "snowflake-s",
+    "text-embedding-ada-002"
 ]
 
 def read_docs(ds_path: str) -> List[str]:
