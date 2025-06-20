@@ -1,0 +1,8 @@
+# Run indexer
+python indexer.py --dataset 2
+
+# Run query generator
+python query_creator.py --dataset 2
+
+# Run benchmarker 
+python run_benchmark.py --dataset 2 --queries <file.jsonl> --top_k 10
