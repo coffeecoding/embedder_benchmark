@@ -26,9 +26,9 @@ def paragraphs(text: str) -> List[str]:
 # ---------- main ----------
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--dataset", required=True)               # docs/<id>
-    ap.add_argument("--llm", default="gpt-4.1-mini")          # LLM to query
-    ap.add_argument("--prompt-idx", type=int, default=0)      # choose sys-prompt
+    ap.add_argument("--dataset", required=True)                                 # docs/<id>
+    ap.add_argument("--llm", default="gpt-4.1-mini")                            # LLM to query
+    ap.add_argument("--prompt-idx", type=int, default=len(SYS_PROMPTS)-1)       # choose sys-prompt or default to latest
     args = ap.parse_args()
 
     prompt_template = SYS_PROMPTS[args.prompt_idx]
