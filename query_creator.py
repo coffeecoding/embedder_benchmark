@@ -3,12 +3,17 @@
 Generate ~1 query per paragraph for each doc in a dataset.
 Saves queries as JSON-Lines:
     <dataset_id>_<llm_model>_<prompt_idx>_yyMMdd-HHmmss.jsonl
+
+Run via:
+
+python query_creator.py --dataset 1 --llm gpt-4.1-mini --prompt-idx -1
 """
 import argparse, datetime as dt, glob, json, os, pathlib, re, sys
 from typing import List
 from openai import OpenAI
-from tqdm import tqdm                # ⇦ NEW
-client = OpenAI()                     # uses OPENAI_API_KEY env-var
+from tqdm import tqdm
+client = OpenAI()
+from query_creator_prompts import SYS_PROMPTS
 
 # ---------- reusable helpers ----------
 def read(path: str) -> str:
